@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti ❤️</title>
+    
+    <!-- Tailwind CSS para maquetado rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* --- 1. Fondo dinámico de gradiente suave --- */
+        body {
+            /* Fondo claro para que la lluvia de corazones destaque */
+            background: linear-gradient(-45deg, #fff1f5, #eadcff, #e2fffb, #ffe8f0);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+        }
+
+        .lluvia-corazones {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .corazon-lluvia {
+            position: absolute;
+            top: -10vh;
+            color: rgba(244, 63, 94, 0.18);
+            font-size: clamp(1rem, 2vw, 1.75rem);
+            animation: caerCorazon linear infinite;
+        }
+
+        @keyframes caerCorazon {
+            0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 0.8; }
+            100% { transform: translate3d(35px, 110vh, 0) rotate(180deg); opacity: 0; }
+        }
+
+        .carta-destacada {
+            animation: aparecerCarta 0.8s ease both;
+        }
+
+        .sorpresa-visible {
+            animation: aparecerCarta 0.6s ease both;
+        }
+
+        .colores-favoritos {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), rgba(94, 234, 212, 0.16));
+        }
+
+        .acento-favorito {
+            color: #7c3aed;
+        }
+
+        .borde-favorito {
+            border-color: #5eead4;
+        }
+
+        .atardecer-favorito {
+            animation: aparecerCarta 0.9s ease both;
+        }
+
+        .foto-recuerdo {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .foto-recuerdo:hover {
+            transform: rotate(1deg) scale(1.03);
+            box-shadow: 0 12px 25px rgba(236, 72, 153, 0.2);
+        }
+
+        @keyframes aparecerCarta {
+            from { opacity: 0; transform: translateY(-18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Animación de aparición suave --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-delay {
+            opacity: 0; /* Oculto al inicio */
+            animation: fadeIn 2s ease forwards;
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+    <div id="lluviaCorazones" class="lluvia-corazones" aria-hidden="true"></div>
+
+    <!-- Sección Hero (Inicio) -->
+    <section class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4">
+        
+        <!-- Título principal -->
+        <div class="text-pink-600 font-bold text-3xl md:text-5xl lg:text-6xl drop-shadow-lg mb-6">
+            <h1>Feliz mes, mi princesa</h1>
+        </div>
+
+        <!-- Subtítulo (Aparece después de que termina el título) -->
+        <p class="text-pink-700 text-lg md:text-2xl font-medium fade-in-delay drop-shadow-md">
+            Cada segundo a tu lado es especial
+        </p>
+
+        <!-- Carta personalizada destacada -->
+        <div id="cartaDestacada" class="carta-destacada mt-8 hidden max-w-xl rounded-3xl bg-white/90 px-6 py-5 text-center shadow-xl backdrop-blur-sm">
+            <p class="text-sm font-semibold uppercase tracking-wide text-pink-400">Una carta para ti</p>
+            <p id="cartaDestacadaTexto" class="mt-2 whitespace-pre-line text-lg leading-relaxed text-gray-700"></p>
+        </div>
+
+        <!-- Corazón latiendo (animate-pulse de Tailwind) -->
+        <div class="mt-12 text-6xl text-red-500 animate-pulse drop-shadow-2xl fade-in-delay">
+            ❤️
+        </div>
+
+        <!-- Flecha indicando que hay más abajo -->
+        <div class="absolute bottom-10 text-pink-500 text-3xl animate-bounce fade-in-delay">
+            <a href="#contador">↓</a>
+        </div>
+    </section>
+
+    <!-- Sección del Contador -->
+    <section id="contador" class="relative z-10 min-h-screen bg-white/90 flex flex-col justify-center items-center text-gray-800 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] px-4">
+        
+        <h2 class="text-3xl md:text-5xl font-bold mb-8 text-center text-pink-500 drop-shadow-sm">
+            Nuestro tiempo juntos
+        </h2>
+        
+        <!-- Cuadrícula del contador -->
+        <div class="flex flex-wrap justify-center gap-4 text-center">
+            
+            <div class="bg-pink-100 p-4 rounded-2xl shadow-md w-24 md:w-32">
+                <span id="meses" class="block text-4xl md:text-5xl font-bold text-pink-600">0</span>
+                <span class="text-sm md:text-base font-semibold text-pink-400 uppercase">Meses</span>
+            </div>
+
+            <div class="bg-pink-100 p-4 rounded-2xl shadow-md w-24 md:w-32">
+                <span id="dias" class="block text-4xl md:text-5xl font-bold text-pink-600">0</span>
+                <span class="text-sm md:text-base font-semibold text-pink-400 uppercase">Días</span>
+            </div>
+
+            <div class="bg-pink-100 p-4 rounded-2xl shadow-md w-24 md:w-32">
+                <span id="horas" class="block text-4xl md:text-5xl font-bold text-pink-600">0</span>
+                <span class="text-sm md:text-base font-semibold text-pink-400 uppercase">Horas</span>
+            </div>
+
+            <div class="bg-pink-100 p-4 rounded-2xl shadow-md w-24 md:w-32">
+                <span id="minutos" class="block text-4xl md:text-5xl font-bold text-pink-600">0</span>
+                <span class="text-sm md:text-base font-semibold text-pink-400 uppercase">Minutos</span>
+            </div>
+
+            <div class="bg-pink-100 p-4 rounded-2xl shadow-md w-24 md:w-32">
+                <span id="segundos" class="block text-4xl md:text-5xl font-bold text-pink-600">0</span>
+                <span class="text-sm md:text-base font-semibold text-pink-400 uppercase">Segundos</span>
+            </div>
+        </div>
+
+        <p id="ultimaActualizacion" class="mt-8 text-sm text-pink-400" aria-live="polite">
+            Actualizando ahora...
+        </p>
+
+        <p id="proximoMes" class="mt-3 text-sm font-semibold text-violet-500" aria-live="polite"></p>
+
+        <button id="crearRecordatorio" type="button" class="mt-5 rounded-full border-2 border-pink-300 px-5 py-3 font-semibold text-pink-600 transition hover:bg-pink-100">
+            Crear recordatorio mensual 📅
+        </button>
+        <p id="estadoRecordatorio" class="mt-2 text-sm text-pink-400" aria-live="polite"></p>
+    </section>
+
+    <!-- Música favorita -->
+    <section id="musica" class="relative z-10 bg-pink-50/80 px-4 py-20 text-center text-gray-800">
+        <h2 class="text-3xl md:text-5xl font-bold text-pink-500">Nuestra música</h2>
+        <p class="mx-auto mt-3 max-w-xl text-gray-600">Para acompañar cada momento juntos.</p>
+
+        <div class="mx-auto mt-8 max-w-2xl rounded-3xl bg-white p-6 shadow-md md:p-8">
+            <span class="text-4xl">🎵</span>
+            <h3 class="mt-3 text-2xl font-bold text-pink-600">Nuestra canción</h3>
+            <p class="mt-1 text-gray-600">Columbia - Quevedo</p>
+            <a href="https://www.youtube.com/watch?v=QlZNGcVfeF0" target="_blank" rel="noopener noreferrer" class="mt-5 inline-block rounded-full bg-pink-500 px-6 py-3 font-semibold text-white shadow transition hover:bg-pink-600">
+                Escuchar nuestra canción ↗
+            </a>
+        </div>
+
+        <div class="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-3">
+            <a href="https://www.youtube.com/watch?v=zMvWTnVlYww" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-3 font-semibold text-pink-600 shadow-sm transition hover:bg-pink-100">Morat - Porfa no te vayas ↗</a>
+            <a href="https://www.youtube.com/watch?v=-rey3m8SWQI" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-3 font-semibold text-pink-600 shadow-sm transition hover:bg-pink-100">Dua Lipa - Be the One ↗</a>
+            <a href="https://www.youtube.com/watch?v=kffacxfA7G4" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-3 font-semibold text-pink-600 shadow-sm transition hover:bg-pink-100">Justin Bieber - Baby ↗</a>
+            <a href="https://www.youtube.com/watch?v=u9raS7-NisU" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-3 font-semibold text-pink-600 shadow-sm transition hover:bg-pink-100">Taylor Swift - Daylight ↗</a>
+            <a href="https://www.youtube.com/watch?v=2Vv-BfVoq4g" target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-3 font-semibold text-pink-600 shadow-sm transition hover:bg-pink-100">Ed Sheeran - Perfect ↗</a>
+        </div>
+    </section>
+
+    <!-- Detalles especiales -->
+    <section id="detalles" class="relative z-10 bg-white/70 px-4 py-16 text-center text-gray-800">
+        <p class="text-sm font-semibold uppercase tracking-wide text-orange-500">Pequeños detalles para ti</p>
+        <div class="colores-favoritos mx-auto mt-5 flex w-fit items-center gap-3 rounded-full px-4 py-2 text-sm font-semibold text-gray-600 shadow-sm">
+            <span class="h-6 w-6 rounded-full bg-violet-500 shadow-inner" aria-label="Morado"></span>
+            <span class="h-6 w-6 rounded-full bg-teal-300 shadow-inner" aria-label="Verde agua"></span>
+            <span>Tus colores favoritos</span>
+        </div>
+        <div class="mx-auto mt-5 grid max-w-2xl gap-5 md:grid-cols-2">
+            <figure class="atardecer-favorito overflow-hidden rounded-3xl bg-white/90 p-2 shadow-xl">
+                <img id="imagenAtardecer" alt="Atardecer elegido" class="hidden h-40 w-full rounded-2xl object-cover">
+                <figcaption class="px-3 py-2 text-sm font-semibold text-orange-500">Un atardecer para ti 🌅</figcaption>
+                <label for="cambiarAtardecer" class="borde-favorito mt-2 block cursor-pointer rounded-full border-2 px-4 py-2 text-sm font-semibold text-teal-600 transition hover:bg-teal-50">
+                    Colocar imagen de atardecer
+                    <input id="cambiarAtardecer" type="file" accept="image/*" class="sr-only">
+                </label>
+            </figure>
+
+            <figure class="overflow-hidden rounded-3xl bg-white/90 p-2 shadow-xl">
+                <img id="imagenPerrita" alt="La perrita de mi princesa" class="hidden h-40 w-full rounded-2xl object-cover">
+                <figcaption class="px-3 py-2 text-sm font-semibold text-pink-500">Oli 🐶</figcaption>
+                <label for="cambiarPerrita" class="mt-2 block cursor-pointer rounded-full border-2 border-violet-300 px-4 py-2 text-sm font-semibold text-violet-600 transition hover:bg-violet-50">
+                    Colocar imagen de Oli
+                    <input id="cambiarPerrita" type="file" accept="image/*" class="sr-only">
+                </label>
+            </figure>
+        </div>
+
+        <button id="botonSorpresa" type="button" class="mt-8 rounded-full bg-pink-500 px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-105 hover:bg-pink-600">
+            Pulsa aquí, amor ❤️
+        </button>
+
+        <div id="sorpresa" class="mt-6 hidden max-w-sm overflow-hidden rounded-3xl bg-white/95 text-center shadow-xl">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=85" alt="Corazones rojos como detalle romántico" class="h-48 w-full object-cover">
+            <p class="p-5 text-xl font-bold text-pink-600">Te amo, amor ❤️</p>
+        </div>
+    </section>
+
+    <!-- Regalo mensual con fotos -->
+    <section id="recuerdos" class="relative z-10 overflow-hidden bg-rose-50/80 px-4 py-20 text-gray-800">
+        <div class="mx-auto max-w-4xl text-center">
+            <span class="text-4xl">🎀</span>
+            <h2 class="mt-3 text-3xl font-bold text-pink-500 md:text-5xl">Un regalo para ti</h2>
+            <p class="mx-auto mt-3 max-w-xl text-gray-600">Una pequeña colección de fotos para celebrar cada mes de tu vida.</p>
+
+            <div class="mx-auto mt-8 max-w-2xl rounded-3xl bg-white/90 p-6 text-left shadow-md md:p-8">
+                <label for="mesRecuerdo" class="block font-semibold text-pink-600">¿Para qué mes es este regalo?</label>
+                <select id="mesRecuerdo" class="mt-2 w-full rounded-2xl border-2 border-pink-200 bg-white p-3 text-gray-700 outline-none focus:border-pink-400">
+                    <option value="1">Mes 1</option>
+                    <option value="2">Mes 2</option>
+                    <option value="3">Mes 3</option>
+                    <option value="4">Mes 4</option>
+                    <option value="5">Mes 5</option>
+                    <option value="6">Mes 6</option>
+                    <option value="7">Mes 7</option>
+                    <option value="8">Mes 8</option>
+                    <option value="9">Mes 9</option>
+                    <option value="10">Mes 10</option>
+                    <option value="11">Mes 11</option>
+                    <option value="12">Mes 12</option>
+                </select>
+
+                <label for="fotosRecuerdo" class="mt-5 block cursor-pointer rounded-2xl border-2 border-dashed border-pink-300 bg-pink-50 p-5 text-center transition hover:bg-pink-100">
+                    <span class="block text-lg font-semibold text-pink-600">Agregar fotos</span>
+                    <span class="mt-1 block text-sm text-pink-400">Puedes elegir varias imágenes a la vez</span>
+                    <input id="fotosRecuerdo" type="file" accept="image/*" multiple class="sr-only">
+                </label>
+                <p id="estadoRecuerdos" class="mt-3 text-center text-sm text-pink-400" aria-live="polite">Tus fotos se guardarán solo en este navegador.</p>
+            </div>
+
+            <div id="galeriaRecuerdos" class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4"></div>
+        </div>
+    </section>
+
+    <!-- Carta editable -->
+    <section id="carta" class="relative z-10 bg-white/80 px-4 py-20 text-gray-800">
+        <div class="mx-auto max-w-2xl">
+            <p id="mesCarta" class="mt-3 text-center text-pink-400" aria-live="polite"></p>
+
+            <div class="mt-8 rounded-3xl bg-pink-50 p-6 shadow-md md:p-8">
+                <label for="cartaEntrada" class="mt-8 block font-semibold text-pink-600">Escribe o actualiza tu carta</label>
+                <textarea id="cartaEntrada" maxlength="1200" rows="7" class="mt-3 w-full resize-y rounded-2xl border-2 border-pink-200 bg-white p-4 text-center text-gray-700 outline-none transition focus:border-pink-400" placeholder="Escribe aquí algo especial..."></textarea>
+
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <button id="guardarCarta" type="button" class="rounded-full bg-pink-500 px-5 py-3 font-semibold text-white shadow transition hover:bg-pink-600">Guardar carta</button>
+                    <button id="restaurarCarta" type="button" class="rounded-full border-2 border-pink-300 px-5 py-3 font-semibold text-pink-600 transition hover:bg-pink-100">Usar carta del mes</button>
+                </div>
+                <p id="estadoCarta" class="mt-3 text-sm text-pink-400" aria-live="polite"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script del Contador -->
+    <script>
+        // Fecha de inicio: 13 de junio de 2026 (El formato es Año-Mes-Día)
+        const fechaInicio = new Date('2026-06-13T00:00:00');
+        const cartaGuardada = 'cartaPersonalizada';
+        const recuerdosGuardados = 'recuerdosMensuales';
+        const atardecerGuardado = 'atardecerFavorito';
+        const perritaGuardada = 'perritaFavorita';
+        const cartasPorMes = [
+            'Gracias por llegar a mi vida. Cada momento contigo se siente especial y me hace sonreír.',
+            'Otro mes a tu lado y sigo eligiéndote con la misma ilusión. Gracias por ser tú.',
+            'Me encanta todo lo que estamos construyendo. Ojalá este sea solo uno de muchos meses juntos.',
+            'Contigo aprendí que los detalles pequeños pueden convertirse en recuerdos enormes. Te quiero mucho.'
+        ];
+
+        function obtenerMesesTranscurridos() {
+            const ahora = new Date();
+            let meses = (ahora.getFullYear() - fechaInicio.getFullYear()) * 12;
+            meses += ahora.getMonth() - fechaInicio.getMonth();
+
+            if (ahora.getDate() < fechaInicio.getDate()) {
+                meses--;
+            }
+
+            return Math.max(0, meses);
+        }
+
+        function obtenerCartaDelMes() {
+            const indice = Math.min(obtenerMesesTranscurridos(), cartasPorMes.length - 1);
+            return cartasPorMes[indice];
+        }
+
+        function actualizarCuentaRegresiva(ahora) {
+            let proximaFecha = new Date(ahora.getFullYear(), ahora.getMonth(), 13, 0, 0, 0);
+
+            if (ahora >= proximaFecha) {
+                proximaFecha = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 13, 0, 0, 0);
+            }
+
+            const diferencia = Math.max(0, proximaFecha - ahora);
+            const totalSegundos = Math.floor(diferencia / 1000);
+            const dias = Math.floor(totalSegundos / 86400);
+            const horas = Math.floor((totalSegundos % 86400) / 3600);
+            const minutos = Math.floor((totalSegundos % 3600) / 60);
+            const segundos = totalSegundos % 60;
+
+            document.getElementById('proximoMes').innerText =
+                `Faltan ${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos para el próximo mes.`;
+        }
+
+        function mostrarCarta() {
+            const cartaGuardadaTexto = localStorage.getItem(cartaGuardada);
+            const cartaActual = cartaGuardadaTexto || obtenerCartaDelMes();
+            const esPersonalizada = Boolean(cartaGuardadaTexto);
+
+            document.getElementById('cartaEntrada').value = esPersonalizada ? cartaGuardadaTexto : '';
+            document.getElementById('mesCarta').innerText = esPersonalizada
+                ? 'Carta personalizada'
+                : `Carta del mes ${obtenerMesesTranscurridos() + 1}`;
+
+            const cartaDestacada = document.getElementById('cartaDestacada');
+            cartaDestacada.classList.toggle('hidden', !esPersonalizada);
+            document.getElementById('cartaDestacadaTexto').innerText = esPersonalizada ? cartaGuardadaTexto : '';
+        }
+
+        function leerImagen(archivo) {
+            return new Promise((resolve, reject) => {
+                const lector = new FileReader();
+                lector.onload = () => resolve(lector.result);
+                lector.onerror = reject;
+                lector.readAsDataURL(archivo);
+            });
+        }
+
+        function mostrarAtardecerGuardado() {
+            const imagenGuardada = localStorage.getItem(atardecerGuardado);
+
+            if (imagenGuardada) {
+                const imagen = document.getElementById('imagenAtardecer');
+                imagen.src = imagenGuardada;
+                imagen.classList.remove('hidden');
+            }
+        }
+
+        function mostrarPerritaGuardada() {
+            const imagenGuardada = localStorage.getItem(perritaGuardada);
+
+            if (imagenGuardada) {
+                const imagen = document.getElementById('imagenPerrita');
+                imagen.src = imagenGuardada;
+                imagen.classList.remove('hidden');
+            }
+        }
+
+        function obtenerRecuerdos() {
+            try {
+                return JSON.parse(localStorage.getItem(recuerdosGuardados)) || [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function mostrarRecuerdos() {
+            const galeria = document.getElementById('galeriaRecuerdos');
+            const recuerdos = obtenerRecuerdos();
+            galeria.innerHTML = '';
+
+            if (!recuerdos.length) {
+                return;
+            }
+
+            recuerdos.sort((primero, segundo) => primero.mes - segundo.mes);
+            recuerdos.forEach((recuerdo, indice) => {
+                const tarjeta = document.createElement('figure');
+                tarjeta.className = 'overflow-hidden rounded-3xl bg-white p-2 shadow-md';
+
+                const imagen = document.createElement('img');
+                imagen.className = 'foto-recuerdo w-full rounded-2xl';
+                imagen.src = recuerdo.src;
+                imagen.alt = `Recuerdo del mes ${recuerdo.mes}`;
+
+                const pie = document.createElement('figcaption');
+                pie.className = 'flex items-center justify-between gap-2 px-2 py-3 text-sm font-semibold text-pink-500';
+
+                const mes = document.createElement('span');
+                mes.innerText = `Mes ${recuerdo.mes}`;
+
+                const eliminar = document.createElement('button');
+                eliminar.type = 'button';
+                eliminar.className = 'text-xs text-red-400 hover:text-red-600';
+                eliminar.innerText = 'Eliminar';
+                eliminar.addEventListener('click', () => {
+                    recuerdos.splice(indice, 1);
+                    localStorage.setItem(recuerdosGuardados, JSON.stringify(recuerdos));
+                    mostrarRecuerdos();
+                });
+
+                pie.append(mes, eliminar);
+                tarjeta.append(imagen, pie);
+                galeria.appendChild(tarjeta);
+            });
+        }
+
+        function crearLluviaDeCorazones() {
+            const lluvia = document.getElementById('lluviaCorazones');
+
+            for (let indice = 0; indice < 10; indice++) {
+                const corazon = document.createElement('span');
+                corazon.className = 'corazon-lluvia';
+                corazon.innerText = '♥';
+                corazon.style.left = `${(indice * 17) % 100}%`;
+                corazon.style.animationDelay = `${(indice % 9) * -1.4}s`;
+                corazon.style.animationDuration = `${8 + (indice % 5)}s`;
+                lluvia.appendChild(corazon);
+            }
+        }
+
+        function actualizarContador() {
+            const ahora = new Date();
+            
+            let anios = ahora.getFullYear() - fechaInicio.getFullYear();
+            let meses = ahora.getMonth() - fechaInicio.getMonth();
+            let dias = ahora.getDate() - fechaInicio.getDate();
+            let horas = ahora.getHours() - fechaInicio.getHours();
+            let minutos = ahora.getMinutes() - fechaInicio.getMinutes();
+            let segundos = ahora.getSeconds() - fechaInicio.getSeconds();
+
+            // Ajustes matemáticos para tiempos negativos (acarreo)
+            if (segundos < 0) { segundos += 60; minutos--; }
+            if (minutos < 0) { minutos += 60; horas--; }
+            if (horas < 0) { horas += 24; dias--; }
+            
+            if (dias < 0) {
+                meses--;
+                // Calcular cuántos días tuvo el mes anterior para hacer el acarreo exacto
+                const mesAnterior = new Date(ahora.getFullYear(), ahora.getMonth(), 0);
+                dias += mesAnterior.getDate();
+            }
+            
+            if (meses < 0) {
+                anios--;
+                meses += 12;
+            }
+
+            // Si pasa de 12 meses, sumamos los años a los meses totales (1 año = 12 meses)
+            // Ya que prefieres celebrar "meses", esto mostrará ej: 14 meses en lugar de 1 año y 2 meses.
+            const mesesTotales = (anios * 12) + meses;
+
+            // Actualizar el DOM
+            document.getElementById('meses').innerText = mesesTotales;
+            document.getElementById('dias').innerText = dias;
+            document.getElementById('horas').innerText = horas;
+            document.getElementById('minutos').innerText = minutos;
+            document.getElementById('segundos').innerText = segundos;
+            document.getElementById('ultimaActualizacion').innerText =
+                `Actualizado en vivo: ${ahora.toLocaleTimeString('es-ES')}`;
+            actualizarCuentaRegresiva(ahora);
+        }
+
+        document.getElementById('guardarCarta').addEventListener('click', () => {
+            const texto = document.getElementById('cartaEntrada').value.trim();
+
+            if (!texto) {
+                document.getElementById('estadoCarta').innerText = 'Escribe algo antes de guardar.';
+                return;
+            }
+
+            localStorage.setItem(cartaGuardada, texto);
+            mostrarCarta();
+            document.getElementById('estadoCarta').innerText = 'Tu carta quedó guardada en este dispositivo.';
+        });
+
+        document.getElementById('restaurarCarta').addEventListener('click', () => {
+            localStorage.removeItem(cartaGuardada);
+            mostrarCarta();
+            document.getElementById('estadoCarta').innerText = 'Volviste a la carta automática del mes.';
+        });
+
+        document.getElementById('fotosRecuerdo').addEventListener('change', async (evento) => {
+            const archivos = Array.from(evento.target.files);
+            const mes = Number(document.getElementById('mesRecuerdo').value);
+
+            if (!archivos.length) {
+                return;
+            }
+
+            try {
+                const recuerdos = obtenerRecuerdos();
+                const imagenes = await Promise.all(archivos.map((archivo) => leerImagen(archivo)));
+                imagenes.forEach((src) => recuerdos.push({ mes, src }));
+                localStorage.setItem(recuerdosGuardados, JSON.stringify(recuerdos));
+                mostrarRecuerdos();
+                document.getElementById('estadoRecuerdos').innerText = `${archivos.length} foto(s) agregada(s) al mes ${mes}.`;
+            } catch (error) {
+                document.getElementById('estadoRecuerdos').innerText = 'No se pudieron guardar las fotos. Prueba con imágenes más pequeñas.';
+            }
+
+            evento.target.value = '';
+        });
+
+        document.getElementById('cambiarAtardecer').addEventListener('change', async (evento) => {
+            const [archivo] = evento.target.files;
+
+            if (!archivo) {
+                return;
+            }
+
+            try {
+                const imagen = await leerImagen(archivo);
+                localStorage.setItem(atardecerGuardado, imagen);
+                const imagenAtardecer = document.getElementById('imagenAtardecer');
+                imagenAtardecer.src = imagen;
+                imagenAtardecer.classList.remove('hidden');
+            } catch (error) {
+                document.getElementById('estadoRecordatorio').innerText = 'No se pudo cambiar la imagen del atardecer.';
+            }
+
+            evento.target.value = '';
+        });
+
+        document.getElementById('cambiarPerrita').addEventListener('change', async (evento) => {
+            const [archivo] = evento.target.files;
+
+            if (!archivo) {
+                return;
+            }
+
+            try {
+                const imagen = await leerImagen(archivo);
+                localStorage.setItem(perritaGuardada, imagen);
+                const imagenPerrita = document.getElementById('imagenPerrita');
+                imagenPerrita.src = imagen;
+                imagenPerrita.classList.remove('hidden');
+            } catch (error) {
+                document.getElementById('estadoRecordatorio').innerText = 'No se pudo cambiar la imagen de su perrita.';
+            }
+
+            evento.target.value = '';
+        });
+
+        document.getElementById('botonSorpresa').addEventListener('click', () => {
+            const sorpresa = document.getElementById('sorpresa');
+            sorpresa.classList.toggle('hidden');
+            sorpresa.classList.toggle('sorpresa-visible');
+        });
+
+        document.getElementById('crearRecordatorio').addEventListener('click', () => {
+            const eventoCalendario = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Para ti//Recordatorio mensual//ES',
+                'BEGIN:VEVENT',
+                'UID:feliz-mes-para-ti@cumple-meses',
+                'DTSTART;VALUE=DATE:20260613',
+                'SUMMARY:Feliz mes, mi princesa',
+                'DESCRIPTION:Hoy celebramos otro mes juntos.',
+                'RRULE:FREQ=MONTHLY;BYMONTHDAY=13',
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+            const archivo = new Blob([eventoCalendario], { type: 'text/calendar;charset=utf-8' });
+            const enlace = document.createElement('a');
+            enlace.href = URL.createObjectURL(archivo);
+            enlace.download = 'recordatorio-feliz-mes.ics';
+            enlace.click();
+            URL.revokeObjectURL(enlace.href);
+            document.getElementById('estadoRecordatorio').innerText = 'Se descargó el recordatorio. Ábrelo para agregarlo a tu calendario.';
+        });
+
+        // Ejecutar la función inmediatamente y luego cada segundo (1000 ms)
+        crearLluviaDeCorazones();
+        if (localStorage.getItem(cartaGuardada)?.trim().toLowerCase() === 'te amo') {
+            localStorage.removeItem(cartaGuardada);
+        }
+        mostrarCarta();
+        mostrarAtardecerGuardado();
+        mostrarPerritaGuardada();
+        document.getElementById('mesRecuerdo').value = Math.min(12, obtenerMesesTranscurridos() + 1);
+        mostrarRecuerdos();
+        actualizarContador();
+        setInterval(actualizarContador, 1000);
+    </script>
+
+</body>
+</html>
